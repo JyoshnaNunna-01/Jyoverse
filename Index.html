@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jyoverse | Art </title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f8f3eb;
+      color: #49382d;
+      font-family: Georgia, serif;
+    }
+    header {
+      padding: 22px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e5d9c9;
+    }
+    .logo { font-size: 28px; letter-spacing: 2px; }
+    nav a {
+      color: #49382d;
+      text-decoration: none;
+      margin-left: 14px;
+      font-size: 14px;
+    }
+    .hero {
+      padding: 65px 8% 75px;
+      text-align: center;
+      background: #eee2d2;
+    }
+    .hero p { letter-spacing: 3px; font-size: 11px; }
+    h1 { font-size: clamp(38px, 8vw, 65px); font-weight: normal; margin: 20px 0; }
+    .hero h2 { font-size: 18px; font-weight: normal; }
+    .btn {
+      display: inline-block;
+      background: #604837;
+      color: white;
+      padding: 13px 23px;
+      text-decoration: none;
+      margin-top: 20px;
+      border-radius: 2px;
+    }
+    section { padding: 45px 7%; text-align: center; }
+    h2 { font-weight: normal; font-size: 30px; }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
+    }
+    .art {
+      background: #e9ddcf;
+      padding: 35px 12px;
+      min-height: 150px;
+    }
+    .art span { font-size: 35px; }
+    .art h3 { font-size: 18px; font-weight: normal; }
+    .art p { font: 13px Arial, sans-serif; }
+    .order { background: #eee2d2; }
+    footer { padding: 25px; text-align: center; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">jyoverse.</div>
+    <nav>
+      <a href="#art">Art</a>
+      <a href="#about">About</a>
+      <a href="#order">Orders</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <p>ART · </p>
+    <h1>A little universe<br>of handmade art.</h1>
+    <h2>Every line tells a story. Every artwork holds a feeling.</h2>
+    <a class="btn" href="#art">Explore my art</a>
+  </div>
+
+  <section id="art">
+    <p>MADE BY HAND, WITH LOVE</p>
+    <h2>The Art Corner</h2>
+    <div class="gallery">
+      <div class="art"><span>✿</span><h3>Mandala Art</h3><p>Patterns with patience</p></div>
+      <div class="art"><span>♡</span><h3>Pencil Portraits</h3><p>Memories in every line</p></div>
+      <div class="art"><span>❋</span><h3>Paintings</h3><p>Colours with a story</p></div>
+      <div class="art"><span>☼</span><h3>Traditional Art</h3><p>Art rooted in culture</p></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>A little about Jyoverse</h2>
+    <p>A small creative space where handmade art, imagination and emotion come together.</p>
+  </section>
+
+  <section class="order" id="order">
+    <p>HAVE AN IDEA IN MIND?</p>
+    <h2>Let's create something special.</h2>
+    <p>Custom portraits, paintings and handmade art made just for you.</p>
+    <a class="btn" href="https://www.instagram.com/" target="_blank">Ask about an order</a>
+    <p>Replace this Instagram link with your art page's profile link.</p>
+  </section>
+
+  <footer>© 2026 jyoverse. · Art .</footer>
+</body>
+</html>
