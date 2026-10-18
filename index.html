@@ -1,104 +1,500 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jyoverse.</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jyoverse. | Art</title>
+
 <style>
-body{margin:0;background:#f7f1e8;color:#49352b;font-family:Georgia;text-align:center}
-header{padding:20px;font-size:28px}
-nav{position:fixed;bottom:0;background:#fffaf3;width:100%;padding:15px 0}
-button{padding:10px;margin:5px;background:#49352b;color:white;border:0}
-img{width:90%;max-height:55vh;object-fit:contain}
-.page{display:none;padding:20px 10px 90px}
-.active{display:block}
-.card{display:inline-block;width:44%;margin:2%;background:#fffaf3;padding:5px}
-.card img{width:100%;height:180px;object-fit:cover}
+:root {
+  --bg: #f7f1e8;
+  --paper: #fffaf3;
+  --brown: #49352b;
+  --muted: #8c7769;
+  --line: #e6d8c9;
+  --accent: #a66b4e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--brown);
+  font-family: Georgia, serif;
+}
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 15px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand { font-size: 1.5rem; font-weight: bold; }
+.brand span { color: var(--accent); }
+.tag { font: 11px Arial; color: var(--muted); }
+
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 22px 16px 100px;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+h1 {
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  font-weight: normal;
+  line-height: 1.1;
+}
+
+h2, h3 { font-weight: normal; }
+.eyebrow {
+  font: 11px Arial;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.muted { color: var(--muted); }
+
+.home {
+  max-width: 530px;
+  margin: 10px auto;
+}
+
+.home-heading { text-align: center; margin-bottom: 22px; }
+.home-heading p { color: var(--muted); }
+
+.slide {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 10px;
+}
+
+.slide-image {
+  height: min(62vh, 560px);
+  min-height: 300px;
+  background: #e9dfd2;
+}
+
+.slide-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.slide-info { text-align: center; padding: 14px 5px 6px; }
+.slide-info h2 { font-size: 1.2rem; margin: 0 0 6px; }
+.slide-info p { font: 12px Arial; color: var(--muted); }
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 15px;
+}
+
+.circle {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--brown);
+}
+
+.dots { display: flex; gap: 7px; }
+.dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #d2c2b3;
+}
+.dot.active { background: var(--accent); }
+
+.note {
+  text-align: center;
+  color: var(--muted);
+  font: 12px Arial;
+}
+
+.top { margin: 8px 0 18px; }
+.top h1 { font-size: 2.5rem; margin-bottom: 0; }
+
+.filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0 15px;
+}
+
+.filter {
+  white-space: nowrap;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 9px 13px;
+  background: transparent;
+  color: var(--brown);
+  font: 12px Arial;
+}
+.filter.active { background: var(--brown); color: white; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 9px;
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  background: #e9dfd2;
+}
+
+.card h3 { font-size: 1rem; margin: 10px 0 6px; }
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  font: 12px Arial;
+  color: var(--muted);
+}
+
+.btn {
+  border: 0;
+  border-radius: 2px;
+  padding: 11px 14px;
+  background: var(--brown);
+  color: white;
+}
+
+.btn.secondary { background: #eee2d5; color: var(--brown); }
+.card .btn { width: 100%; margin-top: 11px; }
+
+.detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.detail-photo {
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  background: #e9dfd2;
+}
+
+.panel, .summary, .info {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 18px;
+}
+
+.panel h1 { font-size: 2rem; }
+.price { font-size: 1.3rem; margin: 12px 0; }
+
+.label {
+  display: block;
+  font: 12px Arial;
+  margin: 14px 0 7px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid var(--line);
+  background: #fffdf9;
+  color: var(--brown);
+}
+
+.qty { max-width: 100px; }
+.panel .btn { width: 100%; margin-top: 14px; }
+
+.back {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  padding: 0;
+  margin-bottom: 18px;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 68px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.cart-item img {
+  width: 68px;
+  height: 82px;
+  object-fit: cover;
+}
+
+.cart-item h3 { font-size: 1rem; margin: 0 0 6px; }
+.cart-item p { font: 12px Arial; color: var(--muted); }
+.cart-item input { width: 65px; padding: 7px; }
+
+.remove {
+  border: 0;
+  background: transparent;
+  color: #9b5a45;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 0;
+  font: 13px Arial;
+}
+
+.total {
+  border-top: 1px solid var(--line);
+  padding-top: 13px;
+  font-weight: bold;
+}
+
+.check {
+  display: flex;
+  gap: 9px;
+  font: 13px Arial;
+  margin: 14px 0;
+}
+.check input { width: auto; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.full { grid-column: 1 / -1; }
+
+.empty {
+  padding: 28px 15px;
+  text-align: center;
+  background: var(--paper);
+  border: 1px dashed var(--line);
+  color: var(--muted);
+}
+
+.info { margin: 12px 0; }
+.info p { line-height: 1.65; }
+
+nav {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  padding: 8px 4px;
+}
+
+.nav {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: 11px Arial;
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.nav b { font-size: 18px; font-weight: normal; }
+.nav.active { color: var(--accent); font-weight: bold; }
+
+.toast {
+  display: none;
+  position: fixed;
+  bottom: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2e211b;
+  color: white;
+  padding: 12px;
+  z-index: 20;
+}
+
+@media (min-width: 700px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .detail, .form-grid { grid-template-columns: 1fr; }
+  .full { grid-column: auto; }
+}
 </style>
 </head>
+
 <body>
-<header>Jyoverse.</header>
+<header>
+  <div class="brand">Jyoverse<span>.</span></div>
+  <div class="tag">ART MADE WITH HEART</div>
+</header>
 
-<section id="home" class="page active">
-<h1>Art made with heart</h1>
-<img id="photo" src="images/art1.jpg">
-<h3 id="name">Devotional Art</h3>
-<p id="size">Size: A4</p>
-<button onclick="slide(-1)">❮</button>
-<button onclick="slide(1)">❯</button>
+<main>
+<section class="page active" id="home">
+  <div class="home">
+    <div class="home-heading">
+      <div class="eyebrow">A little world of art</div>
+      <h1>Made by hand.<br>Made with heart.</h1>
+      <p>Original artwork, created one piece at a time.</p>
+    </div>
+    <div class="slide">
+      <div class="slide-image">
+        <img id="homeImg" src="images/art1.jpg" alt="Artwork">
+      </div>
+      <div class="slide-info">
+        <h2 id="homeName">Devotional Artwork</h2>
+        <p id="homeSize">Size: A4</p>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="circle" id="prev">←</button>
+      <div class="dots" id="dots"></div>
+      <button class="circle" id="next">→</button>
+    </div>
+    <p class="note">Swipe left or right to explore.</p>
+  </div>
 </section>
 
-<section id="art" class="page">
-<h2>My Artworks</h2>
-<div id="gallery"></div>
+<section class="page" id="art">
+  <div class="top"><div class="eyebrow">The collection</div><h1>Artworks</h1></div>
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
 </section>
 
-<section id="about" class="page">
-<h2>About Jyoverse.</h2>
-<p>Handmade art created with love.</p>
-<p>Custom orders available on Instagram.</p>
-<button onclick="instagram()">Contact on Instagram</button>
+<section class="page" id="detail">
+  <button class="back" onclick="showPage('art')">← Back to artworks</button>
+  <div id="detailContent"></div>
 </section>
 
-<section id="cart" class="page">
-<h2>My Cart</h2>
-<div id="items"></div>
-<p id="total">Total: ₹0</p>
-<label><input type="checkbox" id="frame" onchange="showCart()"> Add framing ₹149 per artwork</label>
-<button onclick="checkout()">Order on Instagram</button>
+<section class="page" id="cart">
+  <div class="eyebrow">Your chosen pieces</div>
+  <h1>Your Cart</h1>
+  <div id="cartContent"></div>
 </section>
+
+<section class="page" id="checkout">
+  <button class="back" onclick="showPage('cart')">← Back to cart</button>
+  <div class="eyebrow">Almost yours</div>
+  <h1>Place your order</h1>
+  <p class="muted">Enter your details. Your order message will be prepared for Instagram.</p>
+  <form id="checkoutForm">
+    <div class="form-grid">
+      <div><label class="label" for="customerName">Your name *</label><input id="customerName" required placeholder="Full name"></div>
+      <div><label class="label" for="customerPhone">Phone number *</label><input id="customerPhone" required type="tel" placeholder="Phone number"></div>
+      <div class="full"><label class="label" for="customerAddress">Delivery address *</label><textarea id="customerAddress" required rows="3" placeholder="House number, street, city, PIN code"></textarea></div>
+      <div class="full"><label class="label" for="customerNote">Extra note (optional)</label><textarea id="customerNote" rows="2" placeholder="Any special request?"></textarea></div>
+    </div>
+    <div class="summary" id="checkoutSummary"></div>
+    <label class="check"><input type="checkbox" id="frame"> Add framing for ₹149 per artwork.</label>
+    <button class="btn" type="submit" style="width:100%">Prepare order on Instagram</button>
+  </form>
+  <p class="note">This site prepares your order message; it cannot send a DM automatically.</p>
+</section>
+
+<section class="page" id="about">
+  <div class="eyebrow">The person behind the pieces</div>
+  <h1>About Jyoverse.</h1>
+  <div class="info">
+    <p>Welcome to Jyoverse. — a little space for handmade art, thoughtful details and pieces made with care.</p>
+    <p>From devotional art to mandalas and shadow art, every artwork begins with an idea and becomes something personal through the process of making it.</p>
+    <p>Want a custom artwork? Send a message on Instagram and share your idea.</p>
+    <button class="btn" onclick="openInstagram()">Message on Instagram</button>
+  </div>
+  <div class="info"><h2>Custom orders</h2><p>Availability, delivery details and payment can be confirmed through Instagram before your order is finalised.</p></div>
+</section>
+
+<section class="page" id="orders">
+  <div class="eyebrow">Your saved orders</div>
+  <h1>Orders</h1>
+  <p class="muted">Orders prepared on this device appear here.</p>
+  <div id="ordersContent"></div>
+</section>
+<footer>Made with care · Jyoverse.</footer>
+</main>
 
 <nav>
-<button onclick="page('home')">Home</button>
-<button onclick="page('art')">Art</button>
-<button onclick="page('about')">About</button>
-<button onclick="page('cart')">Cart</button>
+  <button class="nav active" data-page="home"><b>⌂</b>Home</button>
+  <button class="nav" data-page="art"><b>▧</b>Art</button>
+  <button class="nav" data-page="about"><b>♡</b>About</button>
+  <button class="nav" data-page="cart"><b>♧</b>Cart <span id="cartCount"></span></button>
+  <button class="nav" data-page="orders"><b>☷</b>Orders</button>
 </nav>
-
-<script>
-const arts=[
-{name:"Devotional Art",size:"A4",price:799,img:"images/art1.jpg"},
-{name:"Mandala Art",size:"A5",price:399,img:"images/art2.jpg"},
-{name:"Shadow Art",size:"A4",price:599,img:"images/art3.jpg"}
-];
-let index=0,cart=[];
-
-function slide(n){
- index=(index+n+arts.length)%arts.length;
- photo.src=arts[index].img;
- name.textContent=arts[index].name;
- size.textContent="Size: "+arts[index].size;
-}
-
-function page(id){
- document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- if(id==="art")gallery.innerHTML=arts.map((a,i)=>
- `<div class="card"><img src="${a.img}"><h3>${a.name}</h3>
- <p>${a.size} · ₹${a.price}</p>
- <button onclick="add(${i})">Add to Cart</button></div>`).join("");
- if(id==="cart")showCart();
-}
-
-function add(i){cart.push(i);alert("Added to cart")}
-function showCart(){
- items.innerHTML=cart.map(i=>arts[i].name+" — ₹"+arts[i].price).join("<br>");
- let total=cart.reduce((s,i)=>s+arts[i].price,0);
- if(frame.checked)total+=cart.length*149;
- document.getElementById("total").textContent="Total: ₹"+total;
-}
-
-function instagram(){
- window.open("https://instagram.com/jyoverse.art","_blank");
-}
-
-function checkout(){
- if(!cart.length){alert("Cart is empty");return}
- let message="Hi Jyoverse.! I want to order:\\n"+
- cart.map(i=>arts[i].name+" - ₹"+arts[i].price).join("\\n");
- if(frame.checked)message+="\\nFraming selected";
- prompt("Copy this message and send it on Instagram:",message);
- instagram();
-}
-</script>
+<div class="toast" id="toast"></div>
+<!-- PART 2 CONTINUES HERE -->
 </body>
 </html>
+// Artwork categories
+const categories = [
+  "All Artworks",
+  "Devotional Art",
+  "Shadow Art",
+  "Mandala Art",
+  "Others"
+];
+
+// Search and category filter
+function filterArt(category) {
+  const filtered = category === "All Artworks"
+    ? arts
+    : arts.filter(a => a.name === category);
+
+  gallery.innerHTML = filtered.map(a => `
+    <div class="card">
+      <img src="${a.img}" alt="${a.name}">
+      <h3>${a.name}</h3>
+      <p>Size: ${a.size}</p>
+      <p>₹${a.price}</p>
+      <button onclick="add(${arts.indexOf(a)})">
+        Add to Cart
+      </button>
+    </div>
+  `).join("");
+}
+
+// Remove an item from cart
+function removeItem(position) {
+  cart.splice(position, 1);
+  showCart();
+}
+
+// Save order details for the Orders page
+function saveOrder(message) {
+  localStorage.setItem("jyoverseLastOrder", message);
+}
+
+// Show last order
+function showOrders() {
+  const order = localStorage.getItem("jyoverseLastOrder");
+  alert(order || "No orders yet!");
+}
