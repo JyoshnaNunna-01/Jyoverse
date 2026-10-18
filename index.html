@@ -352,6 +352,7 @@ nav {
   .full { grid-column: auto; }
 }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -453,6 +454,13 @@ nav {
 <div class="toast" id="toast"></div>
 
 <script>
+  const SUPABASE_URL = "https://xhmnwghgmbbyhykqvatv.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_6kHE22XAdBDgihoTe5SqBw_FE0LnEEY";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 const arts = [
  {name:"Krishna",category:"Devotional Art",size:"A4",price:799,img:"images/art1.jpg"},
  {name:"Mandala with Flowers",category:"Mandala Art",size:"A5",price:399,img:"images/art2.jpg"},
