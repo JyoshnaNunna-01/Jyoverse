@@ -500,5 +500,28 @@ renderCategories();
 renderGallery();
 renderCart();
 </script>
+  <script>
+function orderOnInstagram(artwork, size, price, quantity) {
+  const message =
+    `Hi Jyoverse! I want to order:\n` +
+    `Artwork: ${artwork}\n` +
+    `Size: ${size}\n` +
+    `Price: ₹${price}\n` +
+    `Quantity: ${quantity}\n` +
+    `Total: ₹${price * quantity}\n` +
+    `Please confirm my order.`;
+
+  navigator.clipboard.writeText(message).then(() => {
+    alert("Order details copied! Paste them into Instagram DM.");
+    window.open(
+      "https://www.instagram.com/jyoverse.art/",
+      "_blank"
+    );
+  }).catch(() => {
+    prompt("Copy your order details:", message);
+  });
+}
+</script>
+</body>
 </body>
 </html>
