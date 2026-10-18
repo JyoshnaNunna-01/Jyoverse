@@ -451,50 +451,170 @@ nav {
   <button class="nav" data-page="orders"><b>☷</b>Orders</button>
 </nav>
 <div class="toast" id="toast"></div>
-<!-- PART 2 CONTINUES HERE -->
-</body>
-</html>
-// Artwork categories
-const categories = [
-  "All Artworks",
-  "Devotional Art",
-  "Shadow Art",
-  "Mandala Art",
-  "Others"
+
+<script>
+const arts = [
+ {name:"Krishna",category:"Devotional Art",size:"A4",price:799,img:"images/art1.jpg"},
+ {name:"Mandala with Flowers",category:"Mandala Art",size:"A5",price:399,img:"images/art2.jpg"},
+ {name:"Shadow Girl",category:"Shadow Art",size:"A4",price:599,img:"images/art3.jpg"}
 ];
 
-// Search and category filter
-function filterArt(category) {
-  const filtered = category === "All Artworks"
-    ? arts
-    : arts.filter(a => a.name === category);
+const categories=["All Artworks","Devotional Art","Shadow Art","Mandala Art","Others"];
+let current=0, selected=arts[0], cart=[];
+const $=id=>document.getElementById(id);
 
-  gallery.innerHTML = filtered.map(a => `
-    <div class="card">
-      <img src="${a.img}" alt="${a.name}">
-      <h3>${a.name}</h3>
-      <p>Size: ${a.size}</p>
-      <p>₹${a.price}</p>
-      <button onclick="add(${arts.indexOf(a)})">
-        Add to Cart
-      </button>
-    </div>
-  `).join("");
+function showPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ $(id).classList.add("active");
+ document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ if(id==="art") renderArt("All Artworks");
+ if(id==="cart") renderCart();
+ if(id==="orders") renderOrders();
+ if(id==="checkout") renderSummary();
+ window.scrollTo(0,0);
 }
 
-// Remove an item from cart
-function removeItem(position) {
-  cart.splice(position, 1);
-  showCart();
+document.querySelectorAll(".nav").forEach(b=>
+ b.addEventListener("click",()=>showPage(b.dataset.page))
+);
+
+function slide(n){
+ current=(current+n+arts.length)%arts.length;
+ $("homeImg").src=arts[current].img;
+ $("homeName").textContent=arts[current].name;
+ $("homeSize").textContent="Size: "+arts[current].size;
+ document.querySelectorAll(".dot").forEach((d,i)=>d.classList.toggle("active",i===current));
 }
 
-// Save order details for the Orders page
-function saveOrder(message) {
-  localStorage.setItem("jyoverseLastOrder", message);
+$("prev").onclick=()=>slide(-1);
+$("next").onclick=()=>slide(1);
+
+$("dots").innerHTML=arts.map((_,i)=>
+ `<button class="dot ${i===0?"active":""}" aria-label="Slide ${i+1}" onclick="slide(${i-current})"></button>`
+).join("");
+
+let startX=0;
+$("homeImg").addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+$("homeImg").addEventListener("touchend",e=>{
+ const dx=e.changedTouches[0].clientX-startX;
+ if(Math.abs(dx)>40) slide(dx<0?1:-1);
+});
+
+$("filters").innerHTML=categories.map((c,i)=>
+ `<button class="filter ${i===0?"active":""}" onclick="renderArt('${c}')">${c}</button>`
+).join("");
+
+function renderArt(category){
+ document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.textContent===category));
+ const list=category==="All Artworks"?arts:arts.filter(a=>a.category===category);
+ $("grid").innerHTML=list.length?list.map(a=>`
+ <div class="card">
+ <img src="${a.img}" alt="${a.name}" onclick="openDetail('${a.name}')">
+ <h3>${a.name}</h3>
+ <div class="meta"><span>${a.size}</span><b>₹${a.price}</b></div>
+ <button class="btn" onclick="openDetail('${a.name}')">View Artwork</button>
+ </div>`).join(""):`<div class="empty">More artworks coming soon.</div>`;
 }
 
-// Show last order
-function showOrders() {
-  const order = localStorage.getItem("jyoverseLastOrder");
-  alert(order || "No orders yet!");
+function openDetail(name){
+ selected=arts.find(a=>a.name===name);
+ $("detailContent").innerHTML=`
+ <div class="detail">
+ <img class="detail-photo" src="${selected.img}" alt="${selected.name}">
+ <div class="panel">
+ <h1>${selected.name}</h1><p>${selected.category}</p>
+ <p>Size: ${selected.size}</p><p class="price">₹${selected.price}</p>
+ <label class="label">Quantity</label>
+ <input id="detailQty" class="qty" type="number" min="1" value="1">
+ <button class="btn" onclick="addCart()">Add to Cart</button>
+ </div></div>`;
+ showPage("detail");
 }
+
+function addCart(){
+ const qty=Math.max(1,parseInt($("detailQty").value)||1);
+ const item=cart.find(i=>i.name===selected.name);
+ if(item)item.qty+=qty;else cart.push({...selected,qty});
+ updateCount(); toast("Added to cart"); showPage("cart");
+}
+
+function updateCount(){
+ $("cartCount").textContent=cart.reduce((s,i)=>s+i.qty,0);
+}
+
+function renderCart(){
+ if(!cart.length){$("cartContent").innerHTML='<div class="empty">Your cart is empty.</div>';return;}
+ $("cartContent").innerHTML=cart.map((i,n)=>`
+ <div class="cart-item">
+ <img src="${i.img}" alt="${i.name}">
+ <div><h3>${i.name}</h3><p>${i.size} · ₹${i.price}</p>
+ <input type="number" min="1" value="${i.qty}" onchange="changeQty(${n},this.value)"></div>
+ <button class="remove" onclick="removeItem(${n})">Remove</button>
+ </div>`).join("")+
+ `<div class="summary"><div class="line"><span>Subtotal</span><b>₹${subtotal()}</b></div>
+ <button class="btn" style="width:100%" onclick="showPage('checkout')">Proceed to Checkout</button></div>`;
+}
+
+function subtotal(){return cart.reduce((s,i)=>s+i.price*i.qty,0);}
+function changeQty(n,v){cart[n].qty=Math.max(1,parseInt(v)||1);updateCount();renderCart();}
+function removeItem(n){cart.splice(n,1);updateCount();renderCart();}
+
+function renderSummary(){
+ $("checkoutSummary").innerHTML=
+ `<div class="line"><span>Artwork subtotal</span><b>₹${subtotal()}</b></div>`;
+ $("frame").onchange=()=>{
+ const charge=$("frame").checked?cart.reduce((s,i)=>s+i.qty*149,0):0;
+ $("checkoutSummary").innerHTML=`
+ <div class="line"><span>Artwork subtotal</span><b>₹${subtotal()}</b></div>
+ <div class="line"><span>Framing</span><b>₹${charge}</b></div>
+ <div class="line total"><span>Total</span><b>₹${subtotal()+charge}</b></div>`;
+ };
+ $("frame").dispatchEvent(new Event("change"));
+}
+
+$("checkoutForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ if(!cart.length){toast("Your cart is empty");showPage("cart");return;}
+ renderSummary();
+ const total=subtotal()+( $("frame").checked?cart.reduce((s,i)=>s+i.qty*149,0):0);
+ const msg=`Hi Jyoverse.! I'd like to place an order.
+Name: ${$("customerName").value}
+Phone: ${$("customerPhone").value}
+Address: ${$("customerAddress").value}
+Items: ${cart.map(i=>i.name+" x "+i.qty+" (₹"+i.price+" each)").join(", ")}
+Framing: ${$("frame").checked?"Yes":"No"}
+Total: ₹${total}
+Note: ${$("customerNote").value}`;
+ const orders=JSON.parse(localStorage.getItem("jyoverseOrders")||"[]");
+ orders.unshift({message:msg,date:new Date().toLocaleString()});
+ localStorage.setItem("jyoverseOrders",JSON.stringify(orders));
+ $("ordersContent").innerHTML="";
+ navigator.clipboard?.writeText(msg).catch(()=>{});
+ window.open("https://www.instagram.com/jyoverse.art/","_blank");
+ alert("Order saved! If the message wasn't copied, copy the details from Orders and send them on Instagram.");
+ cart=[];updateCount();showPage("orders");
+});
+
+function renderOrders(){
+ const orders=JSON.parse(localStorage.getItem("jyoverseOrders")||"[]");
+ $("ordersContent").innerHTML=orders.length?orders.map(o=>`
+ <div class="info"><p>${o.date}</p><pre style="white-space:pre-wrap">${o.message.replace(/</g,"&lt;")}</pre>
+ <button class="btn" onclick="copyOrder(this)">Copy Order</button></div>`).join(""):'<div class="empty">No orders yet.</div>';
+}
+function copyOrder(btn){
+ const text=btn.parentElement.querySelector("pre").textContent;
+ navigator.clipboard?.writeText(text).then(()=>toast("Order copied")).catch(()=>prompt("Copy your order:",text));
+}
+function openInstagram(){window.open("https://www.instagram.com/jyoverse.art/","_blank");}
+function toast(message){
+ $("toast").textContent=message;$("toast").style.display="block";
+ setTimeout(()=> $("toast").style.display="none",1800);
+}
+updateCount();
+renderArt("All Artworks");
+</script>
+</body>
+</html>
+
+</body>
+</html>
